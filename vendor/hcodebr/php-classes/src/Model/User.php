@@ -152,7 +152,7 @@ class User extends Model{
 	}
 
 
-
+	//105
 	public static function getForgot($email, $inadmin = true){
 
 		$sql = new Sql();
