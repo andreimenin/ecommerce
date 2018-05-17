@@ -312,7 +312,7 @@ $app->post("/admin/users/:iduser", function($iduser){
 
 	});
 
-	
+
 
 
 	$app->get("/admin/categories/:idcategory/delete", function($idcategory){
@@ -359,6 +359,20 @@ $app->post("/admin/users/:iduser", function($iduser){
 
 		header('Location: /admin/categories');
 		exit;
+
+	});
+
+
+	$app->get("/categories/:idcategory", function($idcategory){
+
+		$category = new Category();
+
+		$category->get((int) $idcategory);
+
+		$page = new Page();	
+
+		$page->setTpl("category", ['category'=>$category->getValues(),'products'=>[]]);
+
 
 	});
 

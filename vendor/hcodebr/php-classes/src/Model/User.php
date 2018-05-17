@@ -207,7 +207,7 @@ class User extends Model{
 		}
 
 	}
-
+//105
 public static function validForgotDecrypt($result){
 
 	$result = base64_decode($result);
@@ -246,7 +246,7 @@ public static function validForgotDecrypt($result){
 }
 
 
-
+//105
 public static function setForgotUsed($idrecovery){
 
 	//carregar o banco de dados para alterar a senha
@@ -259,7 +259,7 @@ public static function setForgotUsed($idrecovery){
 }
 
 
-
+//105
 public function setPassword($password){
 
 	$sql = new Sql();
@@ -272,13 +272,13 @@ public function setPassword($password){
 
 }
 
-
-	public static function getPasswordHash($password)
-		{
-			return password_hash($password, PASSWORD_DEFAULT, [
+//105
+public static function getPasswordHash($password)
+	{
+		return password_hash($password, PASSWORD_DEFAULT, [
 				'cost'=>12
 			]);
-		}
+	}
 
 
 

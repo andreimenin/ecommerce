@@ -20,6 +20,7 @@ class Model{
 
 		switch ($method) {
 			case 'get':
+				//se ainda não tiver dados no banco 
 				return (isset($this->values[$fieldName])) ? $this->values[$fieldName] : NULL;
 				break;
 

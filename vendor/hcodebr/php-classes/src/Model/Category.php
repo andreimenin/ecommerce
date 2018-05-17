@@ -5,11 +5,11 @@ use \Hcode\DB\Sql;
 use \Hcode\Model;
 use \Hcode\Mailer;
 
-
+///106
 //Model de usuários
 class Category extends Model{
 
-	///104
+	
 	//MÉTODO READ
 	public static function listAll(){
 		$sql = new Sql();
@@ -21,9 +21,7 @@ class Category extends Model{
 	
 	//MÉTODO CREATE
 	public function save(){
-		$sql = new Sql();
-
-		
+		$sql = new Sql();		
 
 		$results = $sql->select("CALL sp_categories_save(:idcategory, :descategory)",
 
@@ -32,6 +30,8 @@ class Category extends Model{
 				":descategory"=>$this->getdescategory() ));
 
 			$this->setData($results[0]);
+
+			Category::updateFile();
 
 	
 	}
@@ -60,8 +60,28 @@ public function delete(){
 
 		]);
 
+	Category::updateFile();
 
 }
+
+
+
+public static function updateFile(){
+
+	$categories = Category::listAll();
+
+	$html = [];
+
+	foreach ($categories as $row) {
+		array_push($html, '<li><a href="/categories/'.$row['idcategory']. '">'.$row['descategory']. '</a> </li>');
+	}
+
+
+	file_put_contents($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "categories-menu.html", implode('', $html));
+
+
+}
+
 
 
 
