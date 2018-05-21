@@ -39,6 +39,8 @@ class Page{
 		$this->tpl->draw("header");
 		}
 
+	
+
 	}
 
 private function setData($data = array()){
