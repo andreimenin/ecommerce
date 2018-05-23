@@ -15,9 +15,31 @@ class Product extends Model{
 		$sql = new Sql();
 
 		return $sql->select("SELECT * FROM tb_products ORDER BY desproduct");
-
-
 	}
+
+
+	//109 
+	//Método de listagem dos produtos
+	public static function checkList($list){
+
+		foreach ($list as &$row) {
+			
+			$p = new Product();
+
+			$p->setData($row);
+
+			$row = $p->getValues();
+
+
+		}
+
+		return $list;
+	}
+
+
+	
+
+
 	
 	//MÉTODO CREATE
 	public function save(){
@@ -97,11 +119,11 @@ public function checkPhoto(){
 					$this->getidproduct() . ".jpg")){
 
 		$url = "/resources/site/img/products/" . $this->getidproduct() . ".jpg";
-	echo "TRUEEEEEEEEE";
+	
 	}
 	else{
 		$url = "/resources/site/img/product.jpg";
-		echo "TRUEEEEEEEEE";
+		
 	}
 
 	return $this->setdesphoto($url);
