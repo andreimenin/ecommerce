@@ -30,7 +30,6 @@ class Product extends Model{
 
 			$row = $p->getValues();
 
-
 		}
 
 		return $list;
@@ -79,7 +78,6 @@ class Product extends Model{
 
 public function delete(){
 
-
 	$sql = new Sql();
 
 	$sql->query("DELETE FROM tb_products WHERE idproduct = :idproduct", [':idproduct'=>$this->getidproduct()
@@ -125,12 +123,7 @@ public function checkPhoto(){
 		$url = "/resources/site/img/product.jpg";
 		
 	}
-
 	return $this->setdesphoto($url);
-
-
-
-
 }
 
 
@@ -144,10 +137,6 @@ public function getValues(){
 	$values = parent::getValues();
 
 	return $values;
-
-
-
-
 }
 
 
@@ -190,6 +179,9 @@ public function setPhoto($file){
 	$this->checkPhoto();
 
 }
+
+
+
 
 
 

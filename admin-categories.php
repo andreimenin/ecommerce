@@ -3,7 +3,7 @@
 use \Hcode\PageAdmin;
 use \Hcode\Model\User;
 use \Hcode\Model\Category;
-
+use \Hcode\Model\Product;
 
 
 //rota para acessar o template de categorias
@@ -96,18 +96,68 @@ use \Hcode\Model\Category;
 
 	});
 
-	////////////////////////////107
-	$app->get("/categories/:idcategory", function($idcategory){
+	
 
-		$category = new Category();
+	$app->get("/admin/categories/:idcategory/products", function($idcategory){
 
-		$category->get((int) $idcategory);
+		User::verifyLogin(); // verificação do login
 
-		$page = new Page();	
+		$category = new Category(); //instanciando a categoria
 
-		$page->setTpl("category", ['category'=>$category->getValues(),'products'=>[]]);
+		$category->get((int) $idcategory); //carrega os dados da categoria
 
-	});
+		$page = new PageAdmin(); //instancia o Page 	
+
+		$page->setTpl("categories-products", ['category'=>$category->getValues(),'productsRelated'=>$category->getProducts(true),
+		   'productsNotRelated'=>$category->getProducts(false)
+	]);
+
+}); //montagem do template
+
+
+$app->get("/admin/categories/:idcategory/products/:idproduct/add", function($idcategory, $idproduct){
+
+		User::verifyLogin(); // verificação do login
+
+		$category = new Category(); //instanciando a categoria
+
+		$category->get((int) $idcategory); //carrega os dados da categoria
+
+		$product = new product();
+
+		$product->get((int)$idproduct);
+
+		$category->addProduct($product);
+
+		header("Location /admin/categories/".$idcategory."/products");
+		exit;
+
+}); 
+
+
+$app->get("/admin/categories/:idcategory/products/:idproduct/remove", function($idcategory, $idproduct){
+
+		User::verifyLogin(); // verificação do login
+
+		$category = new Category(); //instanciando a categoria
+
+		$category->get((int) $idcategory); //carrega os dados da categoria
+
+		$product = new product();
+
+		$product->get((int)$idproduct);
+
+		$category->removeProduct($product);
+
+		header("Location /admin/categories/".$idcategory."/products");
+		exit;
+
+}); 
+
+
+
+
+
 
 
 
