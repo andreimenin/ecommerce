@@ -96,7 +96,7 @@ use \Hcode\Model\Product;
 
 	});
 
-	
+	/////////////110
 
 	$app->get("/admin/categories/:idcategory/products", function($idcategory){
 

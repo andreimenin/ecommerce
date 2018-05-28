@@ -82,7 +82,8 @@ public static function updateFile(){
 
 }
 
-
+//////110
+//Método para listar os produtos na página admin de produtos
 public function getProducts($related = true){
 
 	$sql = new Sql();
@@ -115,7 +116,8 @@ public function getProducts($related = true){
 }
 
 
-
+//////110
+//Método para atribuir categorias aos produtos na página admin de produtos
 public function addProduct(Product $product){
 
 	$sql = new Sql();
@@ -126,7 +128,8 @@ public function addProduct(Product $product){
 	]);
 }
 
-
+//////110
+//Método para remover produtos das categorias na página admin de produtos
 public function removeProduct(Product $product){
 
 	$sql = new Sql();
@@ -136,6 +139,40 @@ public function removeProduct(Product $product){
 		':idproduct'=>$product->getidproduct()
 	]);
 }
+
+
+////////111
+
+public function getProductsPage($page = 1, $itemsPerPage = 8){
+
+	$start = ($page - 1) * $itemsPerPage;
+
+	$sql = new Sql();
+
+	$results = $sql->select("SELECT SQL_CALC_FOUND_ROWS *
+								FROM tb_products a
+								INNER JOIN tb_productscategories b ON a.idproduct = b.idproduct
+								INNER JOIN tb_categories c ON c.idcategory = b.idcategory
+								WHERE c.idcategory = :idcategory
+								LIMIT $start, $itemsPerPage;",
+								[
+									':idcategory'=>$this->getidcategory()
+								]
+							);
+
+	$resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
+
+	return [
+		'data'=>Product::checkList($results), //usado no site.php para a montagem do template
+		'total'=>(int)$resultTotal[0]["nrtotal"],
+		'pages'=>ceil($resultTotal[0]["nrtotal"] / $itemsPerPage)
+
+	];
+
+
+
+}
+
 
 
 
