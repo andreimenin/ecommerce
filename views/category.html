@@ -22,7 +22,7 @@
                     <div class="product-upper">
                         <img src="{$value.desphoto}" alt="">
                     </div>
-                    <h2><a href="/products/{value.desurl}">{$value.desproduct}</a></h2>
+                    <h2><a href="/products/{$value.desurl}">{$value.desproduct}</a></h2>
                     <div class="product-carousel-price">
                         <ins>R${function="formatPrice($value.vlprice)"}</ins> 
                     </div>  
@@ -35,8 +35,6 @@
 
             {/loop}
 
-
-
             
         </div>
         
@@ -44,20 +42,9 @@
             <div class="col-md-12">
                 <div class="product-pagination text-center">
                     <nav>
-                        <ul class="pagination">
-                            {loop="$pages"}
-                        <li>
-                            <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">«</span>
-                            </a>
-                        </li>
-                        <li><a href="{$value.link}">{$value.page}</a></li>
-                        
-                        <li>
-                            <a href="#" aria-label="Next">
-                            <span aria-hidden="true">»</span>
-                            </a>
-                        </li>
+                        <ul class="pagination"> <!-- 111 - Paginação -->
+                            {loop="$pages"}                        
+                        <li><a href="{$value.link}">{$value.page}</a></li>          
                         {/loop}
                         </ul>
                     </nav>                        
