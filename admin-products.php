@@ -4,7 +4,7 @@ use Hcode\PageAdmin;
 use Hcode\Model\User;
 use Hcode\Model\Product;
 
-
+//LISTAGEM DE PRODUTOS
 $app->get("/admin/products", function(){
 
 	User::verifyLogin();
@@ -19,7 +19,7 @@ $app->get("/admin/products", function(){
 
 
 
-
+//NOVO PRODUTO
 $app->get("/admin/products/create", function(){
 
 	User::verifyLogin();	
@@ -46,7 +46,7 @@ $app->post("/admin/products/create", function(){
 
 });
 
-
+//UPDATE PRODUTO
 $app->get("/admin/products/:idproduct", function($idproduct){
 
 	User::verifyLogin();	
@@ -82,7 +82,7 @@ $app->post("/admin/products/:idproduct", function($idproduct){
 
 });
 
-
+//DELETE
 $app->get("/admin/products/:idproduct/delete", function($idproduct){
 
 	User::verifyLogin();	
@@ -98,6 +98,9 @@ $app->get("/admin/products/:idproduct/delete", function($idproduct){
 	exit;
 
 });
+
+
+
 
 
 

@@ -160,7 +160,7 @@ public function setPhoto($file){
 			$image = imagecreatefrompng($file["tmp_name"]);
 			break;	
 		default:
-		
+			return ;
 		break; 	
 	}
 
@@ -181,6 +181,7 @@ public function setPhoto($file){
 }
 
 
+////112 Método para pesquisar produto pela URL registrada e usar seus dados para exibição em product-detail.html
 public function getFromURL($desurl){
 
 	$sql = new Sql();
@@ -194,6 +195,7 @@ public function getFromURL($desurl){
 
 }
 
+/////112 - Método para listar as categorias que o produto pertence e mostrar em product-detail.html
 public function getCategories(){
 
 
