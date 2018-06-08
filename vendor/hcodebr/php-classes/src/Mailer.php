@@ -6,8 +6,8 @@ use Rain\Tpl;
 //Classe para envio de email para recuperação de senha
 class Mailer{
 
-	const USERNAME = "and.skyz@gmail.com";
-	const PASSWORD = "ruk4rioak487122";
+	const USERNAME = "contaparatestedeemail@gmail.com";
+	const PASSWORD = "contaparatestedeemail10/07/1993";
 	const NAME_FROM = "Hcode Store";
 
 	private $mail;
