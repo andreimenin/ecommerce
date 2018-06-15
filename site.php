@@ -76,9 +76,15 @@ $app->get('/', function() {
 
 		$page = new Page();
 
+		//var_dump($cart->getValues());
+
+		//exit;
+
+
 		$page->setTpl("cart", [
 			'cart'=>$cart->getValues(),
-			'products'=>$cart->getProducts()
+			'products'=>$cart->getProducts(),
+			'error'=>Cart::getMsgError()
 		]);
 
 	});
@@ -144,10 +150,22 @@ $app->get('/', function() {
 
 	
 
+//////////////115
+
+	//rota que vai receber a chamada do envio do formulário com CEP para calcular
 
 
+	$app->post("/cart/freigth", function(){
 
+		$cart = Cart::getFromSession();
 
+		$cart->setFreight($_POST['zipcode']);
+
+		header("Location: /cart");
+
+		exit;
+
+	});
 
 
 
