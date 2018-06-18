@@ -9,18 +9,20 @@ use \Hcode\Mailer;
 //Model de usuários
 class User extends Model{
 
-	const SESSION = "User";
-
-	//chave para criptografar e para descriptografar
-	const SECRET = "HcodePhp7_Secret";
+	const SESSION = "User";	
+	const SECRET = "HcodePhp7_Secret"; //chave para criptografar e para descriptografar
+	const ERROR = "UserError";
+	const ERROR_REGISTER = "UserErrorRegister";
 
 
 	///113
 	public static function getFromSession(){
 
+		$user = new User();
+
 		if(isset($_SESSION[User::SESSION]) && (int)$_SESSION[User::SESSION]['iduser'] > 0){
 
-			$user = new User();
+			
 
 			$user->setData($_SESSION[User::SESSION]);
 
@@ -43,7 +45,7 @@ class User extends Model{
 			return false;
 		}else{
 
-			if($inadmin === true && $_SESSION[User::SESSION]['inadmin'] === true){
+			if($inadmin === true && (bool)$_SESSION[User::SESSION]['inadmin'] === true){
 
 				return true;
 
@@ -68,7 +70,11 @@ class User extends Model{
 
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :LOGIN", array(":LOGIN"=>$login));
+		//$results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :LOGIN", array(":LOGIN"=>$login));
+
+		$results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b ON a.idperson = b.idperson WHERE a.deslogin = :LOGIN", array(
+    	":LOGIN"=>$login
+    	)); 
 
 		if(count($results) === 0){
 			throw new \Exception("Usuário inexistente ou senha inválida.");
@@ -78,6 +84,8 @@ class User extends Model{
 
 		if(password_verify($password, $data["despassword"]) === true){
 			$user = new User();
+
+			$data['desperson'] = utf8_encode($data['desperson']);
 
 			$user->setData($data);
 
@@ -102,12 +110,17 @@ class User extends Model{
 	public static function verifyLogin($inadmin = true){
 
 		//validando elementos da SESSION
-		if(User::checkLogin($inadmin)){
+		if(!User::checkLogin($inadmin)){
 
-			header("Location: /admin/login");
-			exit;
+			if($inadmin){
+				header("Location: /admin/login");	
+			}else{
+			header("Location: /login");
+			}	
+
+			exit;	
 		}
-
+				
 	}
 
 	public static function logout(){
@@ -136,9 +149,9 @@ class User extends Model{
 		$results = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)",
 
 			array(
-				":desperson"=>$this->getdesperson(),
+				":desperson"=>$this->utf8_decode(getdesperson()),
 				":deslogin"=>$this->getdeslogin(),
-				":despassword"=>$this->getdespassword(),
+				":despassword"=>User::getPasswordHash($this->getdespassword()),
 				":desemail"=>$this->getdesemail(),
 				":nrphone"=>$this->getnrphone(),
 				":inadmin"=>$this->getinadmin()
@@ -160,8 +173,11 @@ class User extends Model{
 
 		$results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING (idperson) WHERE a.iduser = :iduser", array(":iduser"=>$iduser));
 
+		$data = $results[0];
 
-		$this->setData($results[0]);
+		$data['desperson'] = utf8_encode($data['desperson']);
+
+		$this->setData($data);
 
 
 	}
@@ -177,9 +193,9 @@ class User extends Model{
 
 			array(
 				":iduser"=>$this->getiduser(),
-				":desperson"=>$this->getdesperson(),
+				":desperson"=>$this->utf8_decode(getdesperson()),
 				":deslogin"=>$this->getdeslogin(),
-				":despassword"=>$this->getdespassword(),
+				":despassword"=>User::getPasswordHash($this->getdespassword()),
 				":desemail"=>$this->getdesemail(),
 				":nrphone"=>$this->getnrphone(),
 				":inadmin"=>$this->getinadmin()
@@ -327,6 +343,58 @@ public static function getPasswordHash($password)
 				'cost'=>12
 			]);
 	}
+
+
+
+
+
+///////////////////////////TALVEZ 115
+
+
+	//////115 
+
+	//método para disparar mensagem de erro
+	public static function setError($msg){
+
+		$_SESSION[User::ERROR] = $msg;
+
+	}
+
+	//////115 
+
+	//método para atualizar mensagem de erro
+	public static function getError(){
+
+		$msg = (isset($_SESSION[User::ERROR])) ? $_SESSION[User::ERROR] : "";
+
+		User::clearError();
+
+		return $msg;
+
+
+	}
+
+	//////115 
+
+	//método para limpar msg de erro
+	public static function clearError(){
+		$_SESSION[User::ERROR] = NULL;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,5 +1,8 @@
 <?php
 
+use \Hcode\Model\User;
+
+
 
 function formatPrice($vlprice){
 		//valor, casas decimais, separador de casa decimal e de casa milhar
@@ -7,7 +10,18 @@ function formatPrice($vlprice){
 
 }
 
+function checkLogin($inadmin = true){
 
+	return User::checkLogin($inadmin);
+}
+
+function getUserName(){
+
+	$user = User::getFromSession();
+
+	return $user->getdesperson();
+
+}
 
 
 

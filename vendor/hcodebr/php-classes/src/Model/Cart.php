@@ -18,7 +18,7 @@ class Cart extends Model{
 
 		$cart = new Cart();
 
-		if(isset($_SESSION[Cart::SESSION]) && $_SESSION[Cart::SESSION]['idcart'] > 0){
+		if(isset($_SESSION[Cart::SESSION]) && (int)$_SESSION[Cart::SESSION]['idcart'] > 0){
 
 			$cart->get((int)$_SESSION[Cart::SESSION]['idcart']);
 
@@ -73,7 +73,7 @@ class Cart extends Model{
 
 		$sql = new Sql();
 
-		$results = $sql->select("SELECT * FROM tb_carts WHERE idcart = :idcart",[
+		$results = $sql->select("SELECT * FROM tb_carts WHERE idcart = :idcart", [
 			':idcart'=>$idcart
 		]);
 
@@ -192,17 +192,22 @@ public function removeProduct(Product $product, $all = false){
 	}
 
 
+
+
+
+
+//115
+
+	//Método para somar os valores dos produtos 
 	public function getProductsTotals(){
 
 		$sql = new Sql();
 
 		$results = $sql->select("
 			SELECT SUM(vlprice) AS vlprice, SUM(vlwidth) AS vlwidth, SUM(vlheight) AS vlheight, SUM(vllength) AS vllength, SUM(vlweight) AS vlweight, COUNT(*) AS nrqtd
-			FROM tb_cartsproducts a 
-			INNER JOIN tb_products b ON a.idproduct = b.idproduct 
-			WHERE a.idcart = :idcart AND a.dtremoved IS NULL 
-			GROUP BY b.idproduct, b.desproduct, b.vlprice, b.vlwidth, b.vlheight, b.vllength, b.vlweight, b.desurl
-			ORDER BY b.desproduct",[
+			FROM tb_products a 
+			INNER JOIN tb_cartsproducts b ON a.idproduct = b.idproduct 
+			WHERE b.idcart = :idcart AND dtremoved IS NULL;",[
 				':idcart'=>$this->getidcart()
 			]);
 
@@ -221,11 +226,16 @@ public function removeProduct(Product $product, $all = false){
 
 	}
 
+
+
+//////115 
+
+//Método que calcula o valor do frete
 public function setFreight($nrzipcode){
 
 		$zipcode = str_replace('-','', $nrzipcode);
 
-		var_dump($zipcode);
+		//var_dump($zipcode);
 
 		$totals = $this->getProductsTotals();
 
@@ -251,7 +261,7 @@ public function setFreight($nrzipcode){
 					'sCdAvisoRecebimento'=>'S'
 				]);
 
-
+	///////////consumindo webservice dos correios
 			$xml = simplexml_load_file("http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx/CalcPrecoPrazo?".$qs);
 
 			$result = $xml->Servicos->cServico;
@@ -289,6 +299,7 @@ public function setFreight($nrzipcode){
 
 	}
 
+	//método que formata valores 
 	public static function formatValueToDecimal($value):float{
 
 		$value = str_replace('.', '', $value);
@@ -297,14 +308,18 @@ public function setFreight($nrzipcode){
 
 	}
 
-	//////115 C
+	//////115 
+
+	//método para disparar mensagem de erro
 	public static function setMsgError($msg){
 
 		$_SESSION[Cart::SESSION_ERROR] = $msg;
 
 	}
 
-	//////115 C
+	//////115 
+
+	//método para atualizar mensagem de erro
 	public static function getMsgError(){
 
 		$msg = (isset($_SESSION[Cart::SESSION_ERROR])) ? $_SESSION[Cart::SESSION_ERROR] : "";
@@ -316,12 +331,16 @@ public function setFreight($nrzipcode){
 
 	}
 
-	//////115 C
+	//////115 
+
+	//método para limpar msg de erro
 	public static function clearMsgError(){
 		$_SESSION[Cart::SESSION_ERROR] = NULL;
 	}
 
-	//////115 C
+	//////115 
+
+	//método para atualizar o valor do frete de acordo com os produtos que estão sendo adicionados no carrinho
 	public function updateFreight(){
 
 		if($this->getdeszipcode() != ''){
@@ -331,7 +350,9 @@ public function setFreight($nrzipcode){
 	}
 
 
-	//////115 C
+	//////115 
+
+	//incluindo os valores no objeto para mostrar no template (sessão)
 	public function getValues(){
 
 		$this->getCalculateTotal();
@@ -341,7 +362,9 @@ public function setFreight($nrzipcode){
 
 	}
 
-//////115 C
+//////115 
+
+	//informações e valores totais do carrinho
 	public function getCalculateTotal(){
 
 		$this->updateFreight();
