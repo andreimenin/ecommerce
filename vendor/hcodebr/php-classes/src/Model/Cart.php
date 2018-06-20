@@ -148,9 +148,6 @@ public function addProduct(Product $product){
 public function removeProduct(Product $product, $all = false){
 
 	//remover TODOS os produtos (quantidade)
-
-
-
 	$sql = new Sql();
 
 	if($all){
@@ -168,7 +165,7 @@ public function removeProduct(Product $product, $all = false){
 		]);
 	}
 
-	$this->getCalculateTotal();//recalcular frete ao adicionar produto
+	$this->getCalculateTotal();//recalcular frete ao remover produto
 
 }
 
@@ -290,10 +287,10 @@ public function setFreight($nrzipcode){
 			exit; */
 
 		}
-		else{
-
-
-
+		else{//*******************************************
+			//se não tem nenhum produto no carrinho, o valor do frete é ZERADO --- LINHAS ADICIONADAS FORA DAS VIDEO AULAS
+			$this->setvlfreight(0);
+			$this->save();
 
 		}
 

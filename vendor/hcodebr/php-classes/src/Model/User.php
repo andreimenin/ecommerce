@@ -20,14 +20,9 @@ class User extends Model{
 
 		$user = new User();
 
-		if(isset($_SESSION[User::SESSION]) && (int)$_SESSION[User::SESSION]['iduser'] > 0){
-
-			
+		if(isset($_SESSION[User::SESSION]) && (int)$_SESSION[User::SESSION]['iduser'] > 0){			
 
 			$user->setData($_SESSION[User::SESSION]);
-
-
-
 		}
 
 			return $user;
@@ -95,7 +90,7 @@ class User extends Model{
 
 			return $user;
 
-			exit;
+			//exit;
 
 
 
@@ -149,7 +144,7 @@ class User extends Model{
 		$results = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)",
 
 			array(
-				":desperson"=>$this->utf8_decode(getdesperson()),
+				":desperson"=>utf8_decode($this->getdesperson()),
 				":deslogin"=>$this->getdeslogin(),
 				":despassword"=>User::getPasswordHash($this->getdespassword()),
 				":desemail"=>$this->getdesemail(),
@@ -248,6 +243,7 @@ class User extends Model{
 
 				$result = base64_encode($iv.$code);
 
+				//
 				if ($inadmin === true) {
                  $link = "http://www.hcodecommerce.com.br/admin/forgot/reset?code=$result";
 	             } else {
@@ -257,7 +253,7 @@ class User extends Model{
 
 				$mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinir senha da Hcode Store", "forgot", array(
 
-					"name"=>$data["desperson"],
+					"name"=>utf8_encode($data["desperson"]),
 					"link"=>$link
 
 				));
@@ -282,6 +278,8 @@ public static function validForgotDecrypt($result){
 
 	$idrecovery = openssl_decrypt($code, 'aes-256-cbc', User::SECRET, 0, $iv);
 
+
+
 	$sql = new Sql();
 
 	$results = $sql->select("SELECT * FROM tb_userspasswordsrecoveries a
@@ -292,12 +290,8 @@ public static function validForgotDecrypt($result){
 					    AND
 					    a.dtrecovery IS NULL
 					    AND
-					    DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();
-
-;",array(
-
+					    DATE_ADD(a.dtregister, INTERVAL 1 HOUR) >= NOW();",array(
 	":idrecovery"=>$idrecovery
-
 ));
 
 
@@ -385,6 +379,51 @@ public static function getPasswordHash($password)
 
 
 
+
+///////////117
+
+	//método para disparar mensagem de erro
+	public static function setErrorRegister($msg){
+
+		$_SESSION[User::ERROR_REGISTER] = $msg;
+
+	}
+
+	//////117
+
+	//método para atualizar mensagem de erro
+	public static function getErrorRegister(){
+
+		$msg = (isset($_SESSION[User::ERROR_REGISTER])) ? $_SESSION[User::ERROR_REGISTER] : "";
+
+		User::clearErrorRegister();
+
+		return $msg;
+
+
+	}
+
+	//////117
+
+	//método para limpar msg de erro
+	public static function clearErrorRegister(){
+		$_SESSION[User::ERROR_REGISTER] = NULL;
+	}
+
+
+	//método para checar se o login já existe no banco de dados
+	public static function checkLoginExists($login){
+
+		$sql = new Sql();
+
+		$results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :deslogin",[
+			':deslogin'=>$login
+		]);
+
+		return (count($results) > 0);//retorna se a contagem de resultado é MAIOR que 0
+										//significa que este usuário já existe
+
+	}
 
 
 
