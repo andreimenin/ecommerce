@@ -114,7 +114,7 @@ $app->get('/admin/logout', function(){
 	
 
 		$page->setTpl("forgot-reset", array(
-			"name"=>$user["desperson"],
+			"name"=>utf8_encode($user["desperson"]),
 			"code"=>$_GET["code"]
 		));
 

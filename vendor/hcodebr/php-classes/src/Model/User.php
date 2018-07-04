@@ -12,6 +12,7 @@ class User extends Model{
 	const SESSION = "User";	
 	const SECRET = "HcodePhp7_Secret"; //chave para criptografar e para descriptografar
 	const ERROR = "UserError";
+	const SUCCESS = "UserSuccess";
 	const ERROR_REGISTER = "UserErrorRegister";
 
 
@@ -188,9 +189,9 @@ class User extends Model{
 
 			array(
 				":iduser"=>$this->getiduser(),
-				":desperson"=>$this->utf8_decode(getdesperson()),
+				":desperson"=>utf8_decode($this->getdesperson()),
 				":deslogin"=>$this->getdeslogin(),
-				":despassword"=>User::getPasswordHash($this->getdespassword()),
+				":despassword"=>/*User::getPasswordHash(*/$this->getdespassword(),
 				":desemail"=>$this->getdesemail(),
 				":nrphone"=>$this->getnrphone(),
 				":inadmin"=>$this->getinadmin()
@@ -427,7 +428,36 @@ public static function getPasswordHash($password)
 
 
 
+///////////119
 
+
+	//método para disparar mensagem de erro
+	public static function setSuccess($msg){
+
+		$_SESSION[User::SUCCESS] = $msg;
+
+	}
+
+	//////115 
+
+	//método para atualizar mensagem de erro
+	public static function getSuccess(){
+
+		$msg = (isset($_SESSION[User::SUCCESS])) ? $_SESSION[User::SUCCESS] : "";
+
+		User::clearSuccess();
+
+		return $msg;
+
+
+	}
+
+	//////115 
+
+	//método para limpar msg de erro
+	public static function clearSuccess(){
+		$_SESSION[User::SUCCESS] = NULL;
+	}
 
 
 
