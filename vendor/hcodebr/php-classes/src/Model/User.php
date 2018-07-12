@@ -431,16 +431,14 @@ public static function getPasswordHash($password)
 ///////////119
 
 
-	//método para disparar mensagem de erro
+	//método para disparar mensagem de sucesso
 	public static function setSuccess($msg){
 
 		$_SESSION[User::SUCCESS] = $msg;
 
-	}
+	}	
 
-	//////115 
-
-	//método para atualizar mensagem de erro
+	//método para atualizar mensagem de sucesso
 	public static function getSuccess(){
 
 		$msg = (isset($_SESSION[User::SUCCESS])) ? $_SESSION[User::SUCCESS] : "";
@@ -452,9 +450,8 @@ public static function getPasswordHash($password)
 
 	}
 
-	//////115 
 
-	//método para limpar msg de erro
+	//método para limpar msg de sucesso
 	public static function clearSuccess(){
 		$_SESSION[User::SUCCESS] = NULL;
 	}
