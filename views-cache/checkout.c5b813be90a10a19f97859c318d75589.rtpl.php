@@ -30,6 +30,7 @@
 									</div>
 									<?php } ?>
 
+									
 
 									<div class="woocommerce-billing-fields">
 										<h3>Endereço de entrega</h3>
@@ -37,7 +38,7 @@
 											<label class="" for="billing_address_1">Cep <abbr title="required" class="required">*</abbr>
 											</label>
                                             <input type="text" value="<?php echo htmlspecialchars( $cart["deszipcode"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="00000-000" id="billing_address_1" name="zipcode" class="input-text ">
-                                            <input type="submit" value="Atualizar CEP" id="place_order" class="button alt" formaction="/checkout" formmethod="get">
+                                            <input type="submit" value="Atualizar CEP" id="place_order" class="button alt" formaction="/checkoutupdatecep" formmethod="post">
 										</p>
 										<p id="billing_address_1_field" class="form-row form-row-wide address-field validate-required">
 											<label class="" for="billing_address_1">Endereço <abbr title="required" class="required">*</abbr>

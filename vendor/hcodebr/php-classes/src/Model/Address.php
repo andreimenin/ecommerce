@@ -57,6 +57,8 @@ class Address extends Model{
 	}
 
 
+//////120
+
 	public function save(){
 
 		$sql = new Sql();
@@ -94,7 +96,7 @@ class Address extends Model{
 
 	}
 
-	//////115 
+	//////120
 
 	//método para atualizar mensagem de erro
 	public static function getMsgError(){
@@ -108,7 +110,7 @@ class Address extends Model{
 
 	}
 
-	//////115 
+	//////120
 
 	//método para limpar msg de erro
 	public static function clearMsgError(){

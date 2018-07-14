@@ -25,9 +25,9 @@ class Cart extends Model{
 		}
 		else{
 
-			$cart->getFromSessionID();
+			
 
-			//vefificar se o getFromSessionID não conseguiu carregar um carrinho
+			//verificar se o getFromSessionID não conseguiu carregar um carrinho
 			if(!(int)$cart->getidcart() > 0){
 
 				$data = [
@@ -42,14 +42,14 @@ class Cart extends Model{
 
 				}
 
+				//setando dados no carrinho
 				$cart->setData($data);
 
+				//salvando carrinho
 				$cart->save();
 
+				//setando carrinho novo na sessão
 				$cart->setToSession();
-
-
-
 			}
 
 		}
