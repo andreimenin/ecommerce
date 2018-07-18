@@ -276,7 +276,7 @@ $app->get('/', function() {
 		//criando a order
 
 		//pegando o valor total do carrinho
-		$totals = $cart->getCalculateTotal();
+		$cart->getCalculateTotal();
 
 		$order = new Order();
 
@@ -285,7 +285,7 @@ $app->get('/', function() {
 			'idaddress'=>$address->getidaddress(),
 			'iduser'=>$user->getiduser(),
 			'idstatus'=>OrderStatus::EM_ABERTO,
-			'vltotal'=>$totals['vlprice'] + $cart->getvlfreight()
+			'vltotal'=>$cart->getvltotal()
 		]);
 
 
@@ -627,12 +627,16 @@ $app->get('/', function() {
 	$dias_de_prazo_para_pagamento = 10;
 	$taxa_boleto = 5.00;
 	$data_venc = date("d/m/Y", time() + ($dias_de_prazo_para_pagamento * 86400));  // Prazo de X dias OU informe data: "13/04/2006"; 
-	$valor_cobrado = formatPrice($order->getvltotal()); // Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal
+	$valor_cobrado = formatPrice($order->getvltotal()); // Valor - REGRA: Sem pontos na milhar e tanto faz com "." ou "," ou com 1 ou 2 ou sem casa decimal	
+	$valor_cobrado = str_replace(".", "",$valor_cobrado);
 	$valor_cobrado = str_replace(",", ".",$valor_cobrado);
+	
 	$valor_boleto=number_format($valor_cobrado+$taxa_boleto, 2, ',', '');
 
+	
+
 	$dadosboleto["nosso_numero"] = $order->getidorder();  // Nosso numero - REGRA: Máximo de 8 caracteres!
-	$dadosboleto["numero_documento"] = '0123';	// Num do pedido ou nosso numero
+	$dadosboleto["numero_documento"] = $order->getidorder();;	// Num do pedido ou nosso numero
 	$dadosboleto["data_vencimento"] = $data_venc; // Data de Vencimento do Boleto - REGRA: Formato DD/MM/AAAA
 	$dadosboleto["data_documento"] = date("d/m/Y"); // Data de emissão do Boleto
 	$dadosboleto["data_processamento"] = date("d/m/Y"); // Data de processamento do boleto (opcional)
@@ -640,8 +644,8 @@ $app->get('/', function() {
 
 	// DADOS DO SEU CLIENTE
 	$dadosboleto["sacado"] = $order->getdesperson();
-	$dadosboleto["endereco1"] = $order->getdesaddress() . " " . $order->getdesdistrict() . " " . $order->getdescountry() ;
-	$dadosboleto["endereco2"] = $order->getdescity() . " - " . $order->getdesstate() . " - CEP: " . $order->getdeszipcode();
+	$dadosboleto["endereco1"] = utf8_encode($order->getdesaddress() . " " . $order->getdesdistrict() . " " . $order->getdescountry()) ;
+	$dadosboleto["endereco2"] = utf8_encode($order->getdescity() . " - " . $order->getdesstate() . " - CEP: " . $order->getdeszipcode());
 
 	// INFORMACOES PARA O CLIENTE
 	$dadosboleto["demonstrativo1"] = "Pagamento de Compra na Loja Hcode E-commerce";
@@ -683,14 +687,58 @@ $app->get('/', function() {
 
 	require_once($path . "funcoes_itau.php"); 
 	require_once($path . "layout_itau.php"); 
-	
-
-
-
 
 
 
 	});
+
+
+////////122
+
+$app->get("/profile/orders", function(){
+
+	User::verifyLogin(false);
+
+	$user = User::getFromSession();
+
+	$page = new Page();
+
+	$page->setTpl("profile-orders",['orders'=>$user->getOrders()
+
+	]);
+
+});
+
+
+$app->get("/profile/orders/:idorder", function($idorder){
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+
+	$order->get((int)$idorder);
+
+	$cart = new Cart();
+
+	$cart->get((int)$order->getidcart());
+
+	$cart->getCalculateTotal();
+
+	$page = new Page();
+
+	$page->setTpl("profile-orders-detail",['order'=>$order->getValues(),
+											'cart'=>$cart->getValues(),
+											'products'=>$cart->getProducts()
+	]);
+
+});
+
+
+
+
+
+
+
 
 
 
