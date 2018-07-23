@@ -34,7 +34,6 @@ function getUserName(){
 ///////////122
 //função para mostrar quantos produtos tem e o valor do carrinho
 
-
 function getCartNrQtd(){
 
 	$cart = Cart::getFromSession();
@@ -44,10 +43,6 @@ function getCartNrQtd(){
 	return $totals['nrqtd'];
 }
 
-
-
-
-
 function getCartVlSubtotal(){
 
 	$cart = Cart::getFromSession();
@@ -56,6 +51,20 @@ function getCartVlSubtotal(){
 
 	return formatPrice($totals['vlprice']);
 }
+
+
+////////124
+
+function formatDate($date){
+
+	return date('d/m/Y', strtotime($date));
+
+
+}
+
+
+
+
 
 
 

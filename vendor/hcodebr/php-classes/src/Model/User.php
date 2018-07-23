@@ -280,7 +280,6 @@ public static function validForgotDecrypt($result){
 	$idrecovery = openssl_decrypt($code, 'aes-256-cbc', User::SECRET, 0, $iv);
 
 
-
 	$sql = new Sql();
 
 	$results = $sql->select("SELECT * FROM tb_userspasswordsrecoveries a
