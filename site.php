@@ -617,11 +617,6 @@ $app->get('/', function() {
 
 		$order->get((int)$idorder);
 
-
-
-
-
-
 	//VARIÁVEIS DE CONFIGURAÇÃO DO BOLETO
 		// DADOS DO BOLETO PARA O SEU CLIENTE
 	$dias_de_prazo_para_pagamento = 10;

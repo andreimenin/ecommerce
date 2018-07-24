@@ -75,7 +75,7 @@ public static function listAll(){
 			INNER JOIN tb_users d ON d.iduser = a.iduser 
 			INNER JOIN tb_addresses e USING(idaddress) 
 			INNER JOIN tb_persons f ON f.idperson = d.idperson 
-			ORDER BY a.dtregister DESC 
+			ORDER BY a.dtregist DESC 
 			");
 	}
 

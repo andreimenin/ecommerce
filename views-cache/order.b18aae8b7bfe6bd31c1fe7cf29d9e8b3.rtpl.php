@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-xs-12">
             <h2 class="page-header">
-                <img src="/res/site/img/logo.png" alt="Logo">
+                <img src="/resources/site/img/logo.png" alt="Logo">
                 <small class="pull-right">Date: <?php echo date('d/m/Y'); ?></small>
             </h2>
             </div>
@@ -50,8 +50,8 @@
             <div class="col-sm-4 invoice-col">
             <b>Pedido #<?php echo htmlspecialchars( $order["idorder"], ENT_COMPAT, 'UTF-8', FALSE ); ?></b><br>
             <br>
-            <b>Emitido em:</b> <?php echo formatDate($order["dtregister"]); ?><br>
-            <b>Pago em:</b> <?php echo formatDate($order["dtregister"]); ?>
+            <b>Emitido em:</b> <?php echo formatDate($order["dtregist"]); ?><br>
+            <b>Pago em:</b> <?php echo formatDate($order["dtregist"]); ?>
             </div>
             <!-- /.col -->
         </div>
@@ -142,7 +142,7 @@
                 <button type="button" onclick="window.location.href = '/admin/orders/<?php echo htmlspecialchars( $order["idstatus"], ENT_COMPAT, 'UTF-8', FALSE ); ?>/status'" class="btn btn-default pull-left" style="margin-left: 5px;">
                     <i class="fa fa-pencil"></i> Editar Status
                 </button>
-                <button type="button" onclick="window.open('/boleto/<?php echo htmlspecialchars( $order["idstatus"], ENT_COMPAT, 'UTF-8', FALSE ); ?>')" class="btn btn-default pull-left" style="margin-left: 5px;">
+                <button type="button" onclick="window.open('/boleto/<?php echo htmlspecialchars( $order["idorder"], ENT_COMPAT, 'UTF-8', FALSE ); ?>')" class="btn btn-default pull-left" style="margin-left: 5px;">
                     <i class="fa fa-barcode"></i> Boleto
                 </button>
 

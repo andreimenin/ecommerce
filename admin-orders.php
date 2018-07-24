@@ -27,7 +27,7 @@ $app->get("/admin/orders/:idorder/status", function($idorder){
 
 });
 
-
+//alterar status do pedido
 $app->post("/admin/orders/:idorder/status", function($idorder){
 
 	User::verifyLogin();
@@ -60,7 +60,7 @@ $app->post("/admin/orders/:idorder/status", function($idorder){
 
 
 
-
+//excluir pedido
 $app->get("/admin/orders/:idorder/delete", function($idorder){
 
 	User::verifyLogin();
@@ -77,6 +77,8 @@ $app->get("/admin/orders/:idorder/delete", function($idorder){
 
 });
 
+
+//exibindo dados do pedido
 $app->get("/admin/orders/:idorder", function($idorder){
 
 	User::verifyLogin();
@@ -84,6 +86,8 @@ $app->get("/admin/orders/:idorder", function($idorder){
 	$order = new Order();
 
 	$order->get((int)$idorder);
+
+	
 
 	//pegando o carrinho deste pedido
 	$cart = $order->getCart();
