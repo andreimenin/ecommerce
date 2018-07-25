@@ -515,13 +515,17 @@ public static function getPageSearch($search, $page = 1, $itemsPerPage = 10){
 
 	$sql = new Sql();
 
+	$searchlike = '%'.$search.'%';//MUDANÇA FEITA POR MIM
+
 	$results = $sql->select("SELECT SQL_CALC_FOUND_ROWS *
 							 FROM tb_users a 
 							 INNER JOIN tb_persons b USING(idperson) 
-							 WHERE b.desemail = :search OR b.desperson LIKE :search  OR a.deslogin LIKE :search
+							 WHERE b.desemail = :search OR b.desperson LIKE :searchlike  OR a.deslogin LIKE :searchlike
 							 ORDER BY b.desperson
 								LIMIT $start, $itemsPerPage;",[
-									':search'=>'%'.$search.'%'
+									':search'=>$search,
+									':searchlike'=>$searchlike//MUDANÇA FEITA POR MIM
+
 								]);
 	
 

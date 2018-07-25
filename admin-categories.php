@@ -8,15 +8,43 @@ use \Hcode\Model\Product;
 
 //rota para acessar o template de categorias
 
-	$app->get("/admin/categories" ,function(){
+	$app->get("/admin/categories", function(){
 
 		User::verifyLogin();
 
-		$categories = Category::listAll();
+		//126 - Adicionado códigos de paginação
+		$search = (isset($_GET['search'])) ? $_GET['search'] : '';
+
+		$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
+
+		if($search != ''){
+			$pagination = Category::getPageSearch($search, $page, 2);
+		}
+		else{
+			//Trazendo as páginas sem filtro de busca (search)
+			//define o número de usuários por página
+			//$pagination = Category::getPage($page);
+		$pagination = Category::getPage($page, 2);
+		}
+
+		$pages = [];
+
+		for($x = 0; $x < $pagination['pages']; $x++){
+			array_push($pages, ['href'=>'/admin/categories?'.http_build_query([
+				'page'=>$x+1,
+				'search'=>$search
+			]),
+			'text'=>$x+1]);
+		}/////
+
+
+
+		//$categories = Category::listAll();
 
 		$page = new PageAdmin();		
 
-		$page->setTpl("categories", ['categories'=>$categories]);
+		$page->setTpl("categories", ["categories"=>$pagination['data'],					 "search"=>$search,
+								 "pages"=>$pages]);
 
 	});
 
