@@ -113,10 +113,42 @@ $app->get("/admin/orders",function(){
 
 	User::verifyLogin();
 
+
+
+	//126 - Adicionado códigos de paginação
+		$search = (isset($_GET['search'])) ? $_GET['search'] : '';
+
+		$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
+
+		if($search != ''){
+			$pagination = Order::getPageSearch($search, $page, 10);
+		}
+		else{
+			//Trazendo as páginas sem filtro de busca (search)
+			//define o número de usuários por página
+			//$pagination = Order::getPage($page);
+		$pagination = Order::getPage($page, 10);
+		}
+
+		$pages = [];
+
+		for($x = 0; $x < $pagination['pages']; $x++){
+			array_push($pages, ['href'=>'/admin/orders?'.http_build_query([
+				'page'=>$x+1,
+				'search'=>$search
+			]),
+			'text'=>$x+1]);
+		}/////
+
+
+
+
 	$page = new PageAdmin();
 
 	$page->setTpl("orders", [
-		"orders"=>Order::listAll()
+		"orders"=>$pagination['data'],
+		"search"=>$search,
+		"pages"=>$pages
 
 	]);
 

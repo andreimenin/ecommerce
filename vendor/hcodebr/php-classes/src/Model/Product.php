@@ -5,8 +5,8 @@ use \Hcode\DB\Sql;
 use \Hcode\Model;
 use \Hcode\Mailer;
 
-///106
-//Model de usuários
+
+//Model de produtos
 class Product extends Model{
 
 	
@@ -205,6 +205,69 @@ public function getCategories(){
 		':idproduct'=>$this->getidproduct()
 	]);
 }
+
+
+
+
+/////////126
+	public static function getPage($page = 1, $itemsPerPage = 10){
+
+	$start = ($page - 1) * $itemsPerPage;
+
+	$sql = new Sql();
+
+	$results = $sql->select("SELECT SQL_CALC_FOUND_ROWS *
+							 FROM tb_products 
+							 ORDER BY desproduct
+								LIMIT $start, $itemsPerPage;");
+
+	$resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
+
+	return [
+		'data'=>$results, //usado no site.php para a montagem do template
+		'total'=>(int)$resultTotal[0]["nrtotal"],
+		'pages'=>ceil($resultTotal[0]["nrtotal"] / $itemsPerPage)
+
+	];
+
+
+
+}
+
+////126
+public static function getPageSearch($search, $page = 1, $itemsPerPage = 10){
+
+	$start = ($page - 1) * $itemsPerPage;
+
+	$sql = new Sql();
+
+	$results = $sql->select("SELECT SQL_CALC_FOUND_ROWS *
+							 FROM tb_products		  
+							 WHERE desproduct LIKE :search 
+							 ORDER BY desproduct
+								LIMIT $start, $itemsPerPage;",[
+									':search'=>'%'.$search.'%'
+								]);
+	
+
+	$resultTotal = $sql->select("SELECT FOUND_ROWS() AS nrtotal;");
+
+	return [
+		'data'=>$results, //usado no site.php para a montagem do template
+		'total'=>(int)$resultTotal[0]["nrtotal"],
+		'pages'=>ceil($resultTotal[0]["nrtotal"] / $itemsPerPage)
+
+	];
+
+
+
+}
+
+
+
+
+
+
 
 
 

@@ -5,8 +5,8 @@ use \Hcode\DB\Sql;
 use \Hcode\Model;
 use \Hcode\Mailer;
 
-///106
-//Model de usuários
+
+//Model de categorias
 class Category extends Model{
 
 	
